@@ -954,6 +954,7 @@ public final class CombatUtils {
      */
     private static boolean shouldBeAffected(@NotNull Player player, @NotNull Entity entity) {
         if (entity instanceof Player defender) {
+            
             //TODO: NPC Interaction?
             if (UserManager.getPlayer(defender) == null)
                 return true;
@@ -972,6 +973,9 @@ public final class CombatUtils {
             if (!player.canSee(defender)) {
                 return false;
             }
+
+            if(!canBeDamaged(defender))
+                return false;
             
             // Spectators should not be affected 
             return defender.getGameMode() != GameMode.SPECTATOR;
@@ -1080,5 +1084,12 @@ public final class CombatUtils {
      */
     public static void delayArrowMetaCleanup(@NotNull Arrow arrow) {
         mcMMO.p.getFoliaLib().getImpl().runLater(() -> ProjectileUtils.cleanupProjectileMetadata(arrow), 20*120);
+    }
+
+    private static boolean canBeDamaged(Player player) {
+        EntityDamageEvent damageTestEvent = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.CUSTOM, 0);
+        
+        Bukkit.getPluginManager().callEvent(damageTestEvent);
+        return !damageTestEvent.isCancelled();
     }
 }

@@ -21,6 +21,11 @@ public class StringUtils {
     protected static final DecimalFormat percent = new DecimalFormat("##0.00%");
     protected static final DecimalFormat shortDecimal = new DecimalFormat("##0.0");
 
+    static {
+        percent.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
+        shortDecimal.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
+    }
+
     // Using concurrent hash maps to avoid concurrency issues (Folia)
     private static final Map<EntityType, String> formattedEntityStrings = new ConcurrentHashMap<>();
     private static final Map<SuperAbilityType, String> formattedSuperAbilityStrings = new ConcurrentHashMap<>();
